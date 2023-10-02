@@ -35,10 +35,10 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 
 #### **1. Setup & Initial Configurations**
 
-- [ ] 1.1. Set up a new React application.  
-- [ ] 1.2. Integrate Redux for state management.  
-- [ ] 1.3. Configure Firebase Realtime Database with the React application.  
-- [ ] 1.4. Set up Firebase authentication for role-based sign-in.
+- [x] 1.1. Set up a new React application.  
+- [x] 1.2. Integrate Redux for state management.  
+- [x] 1.3. Configure Firebase Realtime Database with the React application.  
+- [x] 1.4. Set up Firebase authentication for role-based sign-in.
 
 ---
 
