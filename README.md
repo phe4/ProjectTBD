@@ -1,6 +1,5 @@
-# Getting Started with Create React App
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# ProjectTBD
+React app for team registration and schedule management
 
 ## Available Scripts
 
@@ -29,42 +28,112 @@ Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm run eject`
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### **Backlog**
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+---
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+#### **1. Setup & Initial Configurations**
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+- [ ] 1.1. Set up a new React application.  
+- [ ] 1.2. Integrate Redux for state management.  
+- [ ] 1.3. Configure Firebase Realtime Database with the React application.  
+- [ ] 1.4. Set up Firebase authentication for role-based sign-in.
 
-## Learn More
+---
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+#### **2. User Authentication**
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- [ ] 2.1. Create a Sign Up/In interface with role-based registration (Student, Teacher, Admin).  
+- [ ] 2.2. Implement admin-generated email link token for teacher registration.
 
-### Code Splitting
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+#### **3. Student Interface**
 
-### Analyzing the Bundle Size
+- [ ] 3.1. **Homepage**  
+  - [ ] 3.1.1. Implement a search bar for events.  
+  - [ ] 3.1.2. Design an event selector tab.  
+  - [ ] 3.1.3. Display event cards with event details.  
+- [ ] 3.2. **User Profile Page**  
+  - [ ] 3.2.1. Display user-specific details.  
+  - [ ] 3.2.2. Show user's event participation history.  
+- [ ] 3.3. **Notification Page**  
+  - [ ] 3.3.1. Display notifications about updates for events the student has joined.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+---
 
-### Making a Progressive Web App
+#### **4. Teacher Interface**
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+- [ ] 4.1. **Homepage**  
+  - [ ] 4.1.1. Display cards of events created by the teacher.  
+  - [ ] 4.1.2. Implement a button to create a new event.  
+- [ ] 4.2. **Profile Page**  
+  - [ ] 4.2.1. Display teacher-specific details.  
+- [ ] 4.3. **Notification Page**  
+  - [ ] 4.3.1. Display notifications about updates for events the teacher has created.
 
-### Advanced Configuration
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+#### **5. Admin Interface**
 
-### Deployment
+- [ ] 5.1. **Homepage**  
+  - [ ] 5.1.1. Implement a search bar for events.  
+  - [ ] 5.1.2. Design an event selector tab.  
+  - [ ] 5.1.3. Display all event cards.  
+  - [ ] 5.1.4. Implement a button to create a new event.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+---
 
-### `npm run build` fails to minify
+#### **6. Event Card**
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- [ ] 6.1. Display event title.  
+- [ ] 6.2. Show location.  
+- [ ] 6.3. Display Date & time.  
+- [ ] 6.4. Show event capacity.  
+- [ ] 6.5. Implement a button to see attendees.  
+- [ ] 6.6. Implement a discard button (visible only to the event holder or admin).
+
+---
+
+#### **7. Event Detail Modal**
+
+- [ ] 7.1. Display event title.  
+- [ ] 7.2. Show event details (date & time, location, capacity).  
+- [ ] 7.3. List participants (organizer, attendees).  
+- [ ] 7.4. Display event notes/description.  
+- [ ] 7.5. Implement a close button.  
+- [ ] 7.6. Implement an edit button (visible only to the event holder or admin).
+
+---
+
+#### **8. Create Event Modal**
+
+- [ ] 8.1. Implement a form with the following fields:  
+  - [ ] 8.1.1. Title  
+  - [ ] 8.1.2. Description  
+  - [ ] 8.1.3. Location  
+  - [ ] 8.1.4. Datetime picker  
+  - [ ] 8.1.5. Capacity  
+  - [ ] 8.1.6. Sport category  
+- [ ] 8.2. Implement a close button.  
+- [ ] 8.3. Implement a submit button.  
+- [ ] 8.4. Ensure the modal receives focus when opened.
+
+---
+
+#### **9. Firebase Realtime Database Integration**
+
+- [ ] 9.1. Configure database schema for events, users, and notifications.  
+- [ ] 9.2. Implement CRUD operations for events.  
+- [ ] 9.3. Implement user-specific operations (e.g., join event, view own events).
+
+---
+
+#### **10. Testing**
+
+- [ ] 10.1. Conduct unit tests for components.  
+- [ ] 10.2. Perform integration tests for Redux actions and reducers.  
+- [ ] 10.3. Execute end-to-end tests for user flows.
+
+---
