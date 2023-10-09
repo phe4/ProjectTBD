@@ -1,5 +1,8 @@
 import { initializeApp } from 'firebase/app';
 import { getDatabase } from "firebase/database";
+import { getAuth } from "firebase/auth";
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import { useEffect, useState } from 'react';
 
 const firebaseConfig = {
   apiKey: "AIzaSyDmwrkbssHfuE9TOouMeozMW5bPXK39CVU",
@@ -14,5 +17,16 @@ const firebaseConfig = {
 
 const firebaseApp = initializeApp(firebaseConfig);
 
-export const auth = firebaseApp.auth();
+export const auth = getAuth(firebaseApp);
 export const db = getDatabase(firebaseApp);
+
+export const useAuthState = () => {
+  const [user, setUser] = useState();
+
+  useEffect(() => onAuthStateChanged(auth, setUser), []);
+
+  return [user];
+};
+
+const firebaseSignOut = () => signOut(auth);
+export { firebaseSignOut as signOut };

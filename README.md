@@ -45,6 +45,12 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 #### **2. User Authentication**
 
 - [ ] 2.1. Create a Sign Up/In interface with role-based registration (Student, Teacher, Admin).  
+  - [x] 2.1.1. Redux auth slice and actions for sign in
+  - [x] 2.1.2. Redux user slice and actions for fetch, update user data.
+  - [x] 2.1.3. Construct pipeline for auth state initialization after page refresh
+  - [ ] 2.1.4. Redux auth slice and actions for sign out, clear redux store
+  - [ ] 2.1.5. UI implementation
+
 - [ ] 2.2. Implement admin-generated email link token for teacher registration.
 
 ---
