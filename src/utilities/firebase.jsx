@@ -28,5 +28,4 @@ export const useAuthState = () => {
   return [user];
 };
 
-const firebaseSignOut = () => signOut(auth);
-export { firebaseSignOut as signOut };
+export const firebaseSignOut = () => signOut(auth);

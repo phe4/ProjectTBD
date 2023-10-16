@@ -1,9 +1,10 @@
 import './App.css';
 import {useDispatch} from "react-redux";
 import { signInWithGoogle } from './redux/actions/authActions';
-import { useAuthState, signOut } from './utilities/firebase';
+import { useAuthState, firebaseSignOut } from './utilities/firebase';
 import { useEffect } from 'react';
-import { checkUserUpdateOrCreation } from './redux/actions/userActions';
+import { signOutAuth } from './redux/slices/authSlice';
+import { logOutUser } from './redux/slices/userSlice';
 import { setAuth } from './redux/actions/authActions';
 
 function App() {
@@ -30,11 +31,18 @@ function App() {
     dispatch(signInWithGoogle({registrationToken}));
   }
 
+  const logout = () => {
+    console.log("logout")
+    dispatch(signOutAuth());
+    dispatch(logOutUser());
+    firebaseSignOut();
+  }
+
   return (
     <div className="App">
       { user ? <h1>Logged in as {user.displayName}</h1> : <h1>Not logged in</h1> }
       <button onClick={loginWithGoogle}>Login</button>
-      <button onClick={signOut}>Logout</button>
+      <button onClick={logout}>Logout</button>
     </div>
   );
 }

@@ -36,7 +36,7 @@ export const signInWithGoogle = createAsyncThunk(
         // role: registrationToken? "instructor" : "student",
       };
       // thunkAPI.dispatch(setUser(user));
-      thunkAPI.dispatch(checkUserUpdateOrCreation(user));
+      // thunkAPI.dispatch(checkUserUpdateOrCreation(user));
       return { user, token };
     } catch (error) {
       console.log(error);
