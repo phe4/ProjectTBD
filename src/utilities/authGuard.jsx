@@ -7,7 +7,7 @@ const AuthGuard = ({ requiredRole, children }) => {
   const user = useSelector((state) => state.auth.user);
 
   if (!user || !requiredRole.includes(user.role)) {
-    return <Navigate to="/home" />;
+    return <Navigate to="/" />;
   } 
 
   return children;

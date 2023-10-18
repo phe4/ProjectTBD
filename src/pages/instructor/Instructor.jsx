@@ -1,4 +1,4 @@
-const HomeInstructor = () => {
+const InstructorPage = () => {
   return (
     <div>
       <h1>Home Page Instructor</h1>
@@ -6,5 +6,5 @@ const HomeInstructor = () => {
   );
 };
 
-export default HomeInstructor;
+export default InstructorPage;
 

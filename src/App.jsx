@@ -1,79 +1,60 @@
-import './App.css';
-import {useDispatch} from "react-redux";
-import { signInWithGoogle } from './redux/actions/authActions';
-import { useAuthState, firebaseSignOut } from './utilities/firebase';
-import { useEffect } from 'react';
-import { signOutAuth } from './redux/slices/authSlice';
-import { logOutUser } from './redux/slices/userSlice';
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap-icons/font/bootstrap-icons.css";
+import {useDispatch, useSelector} from "react-redux";
+import { useAuthState } from './utilities/firebase';
+import React, { useEffect, useState } from 'react';
 import { setAuth } from './redux/actions/authActions';
-import HomeAdmin from './pages/HomeAdmin';
-import HomeInstructor from './pages/HomeInstr';
-import HomeUser from './pages/HomeUser';
-import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import AuthGuard from './utilities/authGuard';
+import MenuBar from './components/menueBar';
+import EventForm from './components/eventForm';
+import { Row } from "react-bootstrap";
+import Pages from './pages/pages';
+
 
 const App = () => {
   const [user] = useAuthState();
   const dispatch = useDispatch();
+  const [isEventFormVisible, setIsEventFormVisible] = useState(false);
+
+  const reduxAuth = useSelector((state) => state.auth);
 
   useEffect(() => {
     if (user) {
+      // compare the user from firebase with the user from redux
+      // if they are different, update the user in redux
       const updatedUser = {
         uid: user.uid,
         displayName: user.displayName,
         email: user.email,
         photoURL: user.photoURL,
+        role: reduxAuth?.user?.role || "user",
       }
+      console.log(updatedUser);
       dispatch(setAuth(updatedUser));
       // dispatch(checkUserUpdateOrCreation(updatedUser));
     }
   }, [user])
 
-  // const loginWithGoogle = () => {
-  //   console.log("login")
-  //   // get the registration token from url
-  //   const registrationToken = new URLSearchParams(window.location.search).get('token');
-  //   dispatch(signInWithGoogle({registrationToken}));
-  // }
+  const openEventForm = () => {
+    setIsEventFormVisible(true);
+  };
 
-  // const logout = () => {
-  //   console.log("logout")
-  //   dispatch(signOutAuth());
-  //   dispatch(logOutUser());
-  //   firebaseSignOut();
-  // }
-
-  // return (
-  //   <div className="App">
-  //     { user ? <h1>Logged in as {user.displayName}</h1> : <h1>Not logged in</h1> }
-  //     <button onClick={loginWithGoogle}>Login</button>
-  //     <button onClick={logout}>Logout</button>
-  //   </div>
-  // );
+  const closeEventForm = () => {
+    setIsEventFormVisible(false);
+  };
 
   return (
-    // router for / default path, /admin, /instructor, /user and * for 404
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<HomeUser />} />
-        <Route path="/admin" element={
-          <AuthGuard requiredRole={["admin"]}>
-            <HomeAdmin />
-          </AuthGuard>
-        } />
-        <Route path="/instructor" element={
-          <AuthGuard requiredRole={["instructor"]}>
-            <HomeInstructor />
-          </AuthGuard>
-        } />
-        <Route path="*" element={
-          <div>
-            <h1>404</h1>
-          </div>
-        } />
-      </Routes>
-    </BrowserRouter>
+    <>
+      <Row className="mb-3 p-0 w-100 m-0">
+        <MenuBar openEventForm={openEventForm} />
+      </Row>
+      <div className="container mb-5">
+        <EventForm
+          visible={isEventFormVisible}
+          closeEventForm={closeEventForm}
+        />
+        <Pages />
+      </div>
+    </>
   );
 }
 
