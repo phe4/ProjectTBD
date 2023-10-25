@@ -48,7 +48,6 @@ const MenuBar = ({ openEventForm }) => {
       Sign out
     </button>
   );
-  // console.log(user.user);
 
   return (
     <Navbar className="p-3" style={{ backgroundColor: "#1E90FF", maxHeight: "76px", minWidth: "390px" }}>
@@ -82,17 +81,12 @@ const MenuBar = ({ openEventForm }) => {
         )} */}
         {user.user && (
           <Nav className="me-auto">
-            {/* <button 
-              type="button" 
-              className="btn btn-primary position-relative rounded-circle">
-              <Image 
-                src={user.user.photoURL} 
-                roundedCircle 
-                style={{ width: "40px", height: "40px" }} />
-              <span className="position-absolute top-0 start-100 translate-middle badge border border-light rounded-circle bg-danger p-2"><span className="visually-hidden">unread messages</span></span>
-            </button> */}
-            <Button variant="light" style={{marginRight: "10px", padding: '0px', borderRadius: '50%', border: '1px solid white', position: 'relative'}}>
-              <Image src={user.user.photoURL} roundedCircle style={{ width: '40px', height: '40px', objectFit: 'cover' }} />
+            <Button 
+              variant="light" 
+              style={{marginRight: "10px", padding: '0px', borderRadius: '50%', border: '1px solid white', position: 'relative'}}
+              href={`/${user.user?.role}/${user.user?.uid}`}
+              >
+              <Image src={user.user.photoURL} roundedCircle style={{ width: '40px', height: '40px', objectFit: 'cover' }} alt="" />
               <span style={{
                 position: 'absolute',
                 top: '0',
@@ -121,6 +115,7 @@ const MenuBar = ({ openEventForm }) => {
             ></Nav.Link>
           </Nav>
         )}
+
         {user.user ? <SignOutButton /> : <SignInButton />}
       </Container>
     </Navbar>

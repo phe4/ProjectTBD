@@ -1,7 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { db } from "../../utilities/firebase";
-import { ref, onValue, update, get } from "firebase/database";
-import { setAuth } from "../slices/authSlice";
+import { ref, update, get } from "firebase/database";
 
 export const fetchUserData = createAsyncThunk(
   'user/fetchUserData',
@@ -37,7 +36,7 @@ export const checkUserUpdateOrCreation = createAsyncThunk(
   async (user, thunkAPI) => {
     try{
       const userData = await thunkAPI.dispatch(fetchUserData(user.uid)).unwrap();
-      const result = userData;
+      let result = userData;
       if (userData) {
         const updates = {};
         if (user.displayName !== userData.displayName) {

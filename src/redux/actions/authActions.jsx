@@ -1,14 +1,9 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import {
-  getAuth,
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  signOut,
   signInWithPopup,
   GoogleAuthProvider,
 } from "firebase/auth";
-import { auth, db } from "../../utilities/firebase";
-import { setUser } from "../slices/userSlice";
+import { auth} from "../../utilities/firebase";
 import { checkUserUpdateOrCreation } from "./userActions";
 import { fetchUserData } from "./userActions";
 
@@ -31,7 +26,7 @@ export const signInWithGoogle = createAsyncThunk(
 
       // check if the user is already registered
       const userRef = await thunkAPI.dispatch(fetchUserData(result.user.uid)).unwrap();
-      if (userRef.role === "user" && registrationToken && checkResult) {
+      if (userRef && userRef.role === "user" && registrationToken && checkResult) {
         alert("Please contact the admin to upgrade your account");
         return thunkAPI.rejectWithValue("Please contact the admin to upgrade your account");
       }
@@ -43,7 +38,8 @@ export const signInWithGoogle = createAsyncThunk(
         displayName: result.user.displayName,
         email: result.user.email,
         photoURL: result.user.photoURL,
-        role: userRef.role || checkResult ? "Instructor" : "user",
+        // role: userRef.role || checkResult ? "Instructor" : "user",
+        role: userRef? userRef.role : (checkResult ? "Instructor" : "user"),
       };
       // thunkAPI.dispatch(setUser(user));
       // thunkAPI.dispatch(checkUserUpdateOrCreation(user));
@@ -61,7 +57,6 @@ export const setAuth = createAsyncThunk(
   async (user, thunkAPI) => {
     try{
       const res = await thunkAPI.dispatch(checkUserUpdateOrCreation(user));
-      console.log(res.payload);
       return res.payload;
     } catch (error) {
       console.log(error);

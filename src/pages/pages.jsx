@@ -21,9 +21,14 @@ const Pages = () => {
             <InstructorPage />
           </AuthGuard>
         } />
-        <Route path="/notification" element={
+        <Route path="/notifications" element={
           <AuthGuard requiredRole={["admin", "instructor", "user"]}>
             <NotificationPage />
+          </AuthGuard>
+        } />
+        <Route path="/user/*" element={
+          <AuthGuard requiredRole={["user"]}>
+            <UserPage />
           </AuthGuard>
         } />
         <Route path="*" element={

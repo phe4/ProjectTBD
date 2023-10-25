@@ -17,6 +17,8 @@ const App = () => {
 
   const reduxAuth = useSelector((state) => state.auth);
 
+  const role = reduxAuth?.user?.role;
+
   useEffect(() => {
     if (user) {
       // compare the user from firebase with the user from redux
@@ -26,13 +28,12 @@ const App = () => {
         displayName: user.displayName,
         email: user.email,
         photoURL: user.photoURL,
-        role: reduxAuth?.user?.role || "user",
+        role: role || "user",
       }
-      console.log(updatedUser);
       dispatch(setAuth(updatedUser));
       // dispatch(checkUserUpdateOrCreation(updatedUser));
     }
-  }, [user])
+  }, [user, dispatch, role]);
 
   const openEventForm = () => {
     setIsEventFormVisible(true);
@@ -45,7 +46,7 @@ const App = () => {
   return (
     <>
       <Row className="mb-3 p-0 w-100 m-0">
-        <MenuBar openEventForm={openEventForm} />
+        <MenuBar openEventForm={openEventForm}/>
       </Row>
       <div className="container mb-5">
         <EventForm
