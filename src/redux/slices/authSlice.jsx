@@ -4,7 +4,7 @@ import { signInWithGoogle, setAuth } from '../actions/authActions';
 const initialState = {
   user: null,
   token: null,
-  loading: 'idle',
+  loading: 'loading',
   error: null,
 };
 

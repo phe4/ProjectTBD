@@ -2,13 +2,14 @@ import AdminPage from './admin/Admin';
 import InstructorPage from './instructor/Instructor';
 import UserPage from './user/User';
 import NotificationPage from './Notification';
+import ProfilePage from './UserProfile';
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import AuthGuard from '../utilities/authGuard';
 
 const Pages = () => {
   return (
-    <BrowserRouter>
+    // <BrowserRouter>
       <Routes>
         <Route path="/" element={<UserPage />} />
         <Route path="/admin" element={
@@ -26,9 +27,9 @@ const Pages = () => {
             <NotificationPage />
           </AuthGuard>
         } />
-        <Route path="/user/*" element={
-          <AuthGuard requiredRole={["user"]}>
-            <UserPage />
+        <Route path="/profile" element={
+          <AuthGuard requiredRole={["admin", "instructor", "user"]}>
+            <ProfilePage />
           </AuthGuard>
         } />
         <Route path="*" element={
@@ -37,7 +38,7 @@ const Pages = () => {
           </div>
         } />
       </Routes>
-    </BrowserRouter>
+    // </BrowserRouter>
   );
 }
 

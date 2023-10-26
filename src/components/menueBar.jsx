@@ -2,6 +2,7 @@ import React from "react";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
+import { Link, useLocation } from 'react-router-dom';
 import { signInWithGoogle } from '../redux/actions/authActions';
 import { firebaseSignOut } from '../utilities/firebase';
 import { signOutAuth } from '../redux/slices/authSlice';
@@ -12,6 +13,7 @@ import { Image, Button } from "react-bootstrap";
 const MenuBar = ({ openEventForm }) => {
   const user = useSelector((state) => state.auth);
   const dispatch = useDispatch();
+  const location = useLocation();
 
   const signOut = () => {
     dispatch(signOutAuth());
@@ -52,9 +54,9 @@ const MenuBar = ({ openEventForm }) => {
   return (
     <Navbar className="p-3" style={{ backgroundColor: "#1E90FF", maxHeight: "76px", minWidth: "390px" }}>
       <Container>
-        <Navbar.Brand href="/" style={{ color: "white", fontWeight: "bold", fontSize: "1.4rem" }}>
+        <Link to="/" className="navbar-brand" style={{ color: "white", fontWeight: "bold", fontSize: "1.4rem" }}>
           Join!
-        </Navbar.Brand>
+        </Link>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
         {user.user && user.user.role !== "user" && (
@@ -69,50 +71,39 @@ const MenuBar = ({ openEventForm }) => {
             </Nav>
         )}
         </Navbar.Collapse>
-        {/* {user.user && (
+        {user.user && !location.pathname.includes("/profile") && (
           <Nav className="me-auto">
-            <Nav.Link
-              href={`/user/${user.user?.uid}`}
-              style={{ color: "white" }}
-            >
-              Hello, {user.user.displayName}
-            </Nav.Link>
-          </Nav>
-        )} */}
-        {user.user && (
-          <Nav className="me-auto">
-            <Button 
-              variant="light" 
-              style={{marginRight: "10px", padding: '0px', borderRadius: '50%', border: '1px solid white', position: 'relative'}}
-              href={`/${user.user?.role}/${user.user?.uid}`}
+             <Link 
+                to={`/profile`} 
+                style={{ marginRight: "10px", padding: '0px', borderRadius: '50%', border: '1px solid white', position: 'relative', display: 'block' }}
               >
-              <Image src={user.user.photoURL} roundedCircle style={{ width: '40px', height: '40px', objectFit: 'cover' }} alt="" />
-              <span style={{
-                position: 'absolute',
-                top: '0',
-                right: '0',
-                width: '12px',
-                height: '12px',
-                backgroundColor: 'red',
-                border: '2px solid white', 
-                borderRadius: '50%',
-              }}></span>
-            </Button>
+                <Image src={user.user?.photoURL} roundedCircle style={{ width: '40px', height: '40px', objectFit: 'cover' }} alt="" />
+                <span style={{
+                  position: 'absolute',
+                  top: '0',
+                  right: '0',
+                  width: '12px',
+                  height: '12px',
+                  backgroundColor: 'red',
+                  border: '2px solid white', 
+                  borderRadius: '50%',
+                }}></span>
+              </Link>
+
           </Nav>
         )
-
         }
-        {user.user && window.location.pathname.includes("/profile/") && (
+        {user.user && location.pathname.includes("/profile") && (
           <Nav className="me-auto px-3">
-            <Nav.Link
-              href={`/notifications/`}
-              className="bi bi-bell-fill rounded-3"
+            <Link
+              to={`/notifications/`}
+              className="nav-link bi bi-bell-fill rounded-3"
               style={{
                 color: "white",
                 backgroundColor: "rgb(0, 191, 255)",
                 display: "flex",
               }}
-            ></Nav.Link>
+            ></Link>
           </Nav>
         )}
 
