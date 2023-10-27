@@ -87,7 +87,7 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
   - [ ] 5.1.1. Implement a search bar for events.  
   - [ ] 5.1.2. Design an event selector tab.  
   - [ ] 5.1.3. Display all event cards.  
-  - [ ] 5.1.4. Implement a button to create a new event.
+  - [x] 5.1.4. Implement a button to create a new event.
 
 ---
 
@@ -115,23 +115,23 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 
 #### **8. Create Event Modal**
 
-- [ ] 8.1. Implement a form with the following fields:  
-  - [ ] 8.1.1. Title  
-  - [ ] 8.1.2. Description  
-  - [ ] 8.1.3. Location  
-  - [ ] 8.1.4. Datetime picker  
-  - [ ] 8.1.5. Capacity  
-  - [ ] 8.1.6. Sport category  
-- [ ] 8.2. Implement a close button.  
-- [ ] 8.3. Implement a submit button.  
-- [ ] 8.4. Ensure the modal receives focus when opened.
+- [x] 8.1. Implement a form with the following fields:  
+  - [x] 8.1.1. Title  
+  - [x] 8.1.2. Description  
+  - [x] 8.1.3. Location  
+  - [x] 8.1.4. Datetime picker  
+  - [x] 8.1.5. Capacity  
+  - [x] 8.1.6. Sport category  
+- [x] 8.2. Implement a close button.  
+- [x] 8.3. Implement a submit button.  
+- [x] 8.4. Ensure the modal receives focus when opened.
 
 ---
 
 #### **9. Firebase Realtime Database Integration**
 
-- [ ] 9.1. Configure database schema for events, users, and notifications.  
-- [ ] 9.2. Implement CRUD operations for events.  
+- [x] 9.1. Configure database schema for events, users, and notifications.  
+- [x] 9.2. Implement CRUD operations for events.  
 - [ ] 9.3. Implement user-specific operations (e.g., join event, view own events).
 
 ---
