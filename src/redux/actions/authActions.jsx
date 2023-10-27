@@ -43,7 +43,6 @@ export const signInWithGoogle = createAsyncThunk(
       };
       // thunkAPI.dispatch(setUser(user));
       // thunkAPI.dispatch(checkUserUpdateOrCreation(user));
-      console.log(user);
       return { user, token };
     } catch (error) {
       console.log(error);

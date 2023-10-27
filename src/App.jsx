@@ -1,11 +1,12 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
+import "./App.css";
 import {useDispatch} from "react-redux";
 import { useAuthState } from './utilities/firebase';
 import React, { useEffect, useState } from 'react';
 import { setAuth } from './redux/actions/authActions';
 import MenuBar from './components/menueBar';
-import EventForm from './components/eventForm';
+import MemoizedEventForm from './components/eventForm';
 import { Row } from "react-bootstrap";
 import Pages from './pages/pages';
 import { BrowserRouter } from "react-router-dom";
@@ -15,7 +16,6 @@ const App = () => {
   const [user] = useAuthState();
   const dispatch = useDispatch();
   const [isEventFormVisible, setIsEventFormVisible] = useState(false);
-
 
   useEffect(() => {
     if (user) {
@@ -45,8 +45,8 @@ const App = () => {
         <MenuBar openEventForm={openEventForm}/>
       </Row>
       <div className="container mb-5">
-        <EventForm
-          visible={isEventFormVisible}
+        <MemoizedEventForm
+          isVisible={isEventFormVisible}
           closeEventForm={closeEventForm}
         />
         <Pages />

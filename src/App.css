@@ -28,6 +28,14 @@
   color: #61dafb;
 }
 
+.pac-item {
+  z-index: 1056 !important; /* or any high value to ensure it's on top */
+}
+
+.pac-container {
+  z-index: 1056 !important; /* or any high value to ensure it's on top */
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

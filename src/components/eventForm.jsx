@@ -1,23 +1,37 @@
-import { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Modal, Button } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
+import { useDispatch } from "react-redux";
+import { createEvent } from "../redux/actions/dataActions";
+// import MapLocation from "./mapLocationPicker";
 
 export const useFormData = (values = {}) => {
   const [state, setState] = useState(() => ({ values }));
   const change = (evt) => {
-    const { id, value } = evt.target;
-    if (id === "datetime") {
-      // parse the datetime value
-      var date = new Date(value);
-      date = new Intl.DateTimeFormat("en-US", {
-        dateStyle: "short",
-        timeStyle: "short",
-      }).format(date);
-      const newValues = { ...state.values, [id]: date.replace(",", " @") };
-      setState({ values: newValues });
+    if(evt.target) {
+      const { id, value } = evt.target;
+      if (id === "datetime") {
+        // parse the datetime value
+        var date = new Date(value);
+        date = new Intl.DateTimeFormat("en-US", {
+          dateStyle: "short",
+          timeStyle: "short",
+        }).format(date);
+        setState((prevState) => ({
+          ...prevState.values,
+          values: { ...prevState.values, [id]: date },
+        }));
+      } else {
+        setState((prevState) => ({
+          ...prevState.values,
+          values: { ...prevState.values, [id]: value },
+        }));
+      }
     } else {
-      const values = { ...state.values, [id]: value };
-      setState({ values });
+      setState((prevState) => ({
+        ...prevState.values,
+        values: { ...prevState.values, ...evt },
+      }));
     }
   };
   return [state, change];
@@ -77,8 +91,96 @@ const SportDropdown = ({ name, text, change }) => (
   </div>
 );
 
-const EventForm = ({ isVisible, closeEventForm, addEvent }) => {
+const EventForm = ({ isVisible, closeEventForm }) => {
   const [state, change] = useFormData({ datetime: new Date() });
+  const dispatch = useDispatch();
+  // const [isMapModalVisible, setIsMapModalVisible] = useState(false);
+  // const [location, setLocation] = useState("");
+
+
+  const autocompleteInputRef = useRef(null);
+
+  useEffect(() => {
+    if (!isVisible) {
+      const pacContainers = document.querySelectorAll('.pac-container');
+      pacContainers.forEach(container => {
+        container.parentNode.removeChild(container);
+      });
+      return;
+    }
+    const options = {
+      fields: ["formatted_address", "geometry", "name"],
+      strictBounds: false,
+    };
+    console.log("mounting");
+    const autocomplete = new window.google.maps.places.Autocomplete(
+      autocompleteInputRef.current,
+      options,
+    );
+    autocomplete.addListener('place_changed', () => {
+      const place = autocomplete.getPlace();
+      if (!place.geometry || !place.geometry.location) {
+        // User entered the name of a Place that was not suggested and
+        // pressed the Enter key, or the Place Details request failed.
+        window.alert("No details available for input: '" + place.name + "'");
+        return;
+      }
+      console.log(place.geometry.location.lat(), place.geometry.location.lng());
+      handlePlaceSelected(place, autocomplete);
+    });
+    return () => {
+      // Cleanup event listener on component unmount
+      console.log("unmounting");
+      window.google.maps.event.clearInstanceListeners(autocomplete);
+    };
+  }, [isVisible]);
+
+
+
+
+  const handlePlaceSelected = (place, autocomplete) => {
+    // console.log('Selected place:', place);
+    // Update location and latLng with change event
+    const location = place.formatted_address;
+    const latLng = {
+      lat: place.geometry.location.lat(),
+      lng: place.geometry.location.lng(),
+    };
+    change({ location, latLng });
+    // window.google.maps.event.clearInstanceListeners(autocomplete);
+  };
+
+  // const openMapModal = () => {
+  //   setIsMapModalVisible(true);
+  // };
+  // const closeMapModal = () => {
+  //   setIsMapModalVisible(false);
+  // };
+
+  const addEvent = (event) => {
+    console.log(event);
+    // dispatch(createEvent(event));
+  };
+
+  const InputLocation = ({ name, text, state, change }) => (
+    <div className="mb-3">
+      <label htmlFor={name} className="form-label">
+        {text}
+      </label>
+      {/* <MapLocation
+      onPlaceSelected={handlePlaceSelected}
+      change={setLocation}
+      /> */}
+      {/* <input
+      className="form-control"
+      id={name}
+      name={name}
+      defaultValue={state.values?.[name]}
+      onChange={change}
+    /> */}
+    </div>
+  );
+
   return (
     <Modal
       show={isVisible}
@@ -106,12 +208,18 @@ const EventForm = ({ isVisible, closeEventForm, addEvent }) => {
               state={state}
               change={change}
             />
-            <InputField
-              name="location"
-              text="Location"
-              state={state}
-              change={change}
-            />
+            <div className="mb-3">
+              <label htmlFor="location" className="form-label">
+                Location
+              </label>
+              <input
+                ref={autocompleteInputRef}
+                className="form-control"
+                id="location"
+                name="location"
+                // onChange={change}
+              />
+            </div>
             <InputDatetimeField
               name="datetime"
               text="Datetime"
@@ -125,8 +233,8 @@ const EventForm = ({ isVisible, closeEventForm, addEvent }) => {
               change={change}
             />
             <SportDropdown
-              name="sport"
-              text="Sport"
+              name="Topic"
+              text="Topic"
               state={state}
               change={change}
             />
@@ -151,4 +259,6 @@ const EventForm = ({ isVisible, closeEventForm, addEvent }) => {
   );
 };
 
-export default EventForm;
+const MemoizedEventForm = React.memo(EventForm);
+
+export default MemoizedEventForm;
