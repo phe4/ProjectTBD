@@ -12,6 +12,7 @@
     "bootstrap-icons": "^1.11.1",
     "firebase": "^10.4.0",
     "fuse.js": "^7.0.0",
+    "joi": "^17.11.0",
     "react": "^18.2.0",
     "react-bootstrap": "^2.9.0",
     "react-dom": "^18.2.0",

@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Modal, Button } from "react-bootstrap";
-import Form from "react-bootstrap/Form";
 import { useDispatch } from "react-redux";
 import { createEvent } from "../redux/actions/dataActions";
-// import MapLocation from "./mapLocationPicker";
+import { validateEvent } from "../utilities/validation";
+import { Form, InputGroup } from "react-bootstrap";
 
 export const useFormData = (values = {}) => {
   const [state, setState] = useState(() => ({ values }));
@@ -17,6 +17,7 @@ export const useFormData = (values = {}) => {
           dateStyle: "short",
           timeStyle: "short",
         }).format(date);
+        console.log(date);
         setState((prevState) => ({
           ...prevState.values,
           values: { ...prevState.values, [id]: date },
@@ -37,65 +38,50 @@ export const useFormData = (values = {}) => {
   return [state, change];
 };
 
-const InputField = ({ name, text, state, change }) => (
-  <div className="mb-3">
-    <label htmlFor={name} className="form-label">
-      {text}
-    </label>
-    <input
-      className="form-control"
-      id={name}
-      name={name}
-      defaultValue={state.values?.[name]}
+const InputField = ({ name, text, state, change, type }) => (
+  <Form.Group className="mb-3" controlId={name}>
+    <Form.Label>{text}</Form.Label>
+    <Form.Control 
+      type={type}
+      value={state.values?.[name] || ''}
       onChange={change}
+      minLength="3"
+      maxLength={name === "title" ? "50" : "400"}
+      required
     />
-  </div>
+  </Form.Group>
 );
 
 const InputDatetimeField = ({ name, state, change }) => (
-  <div>
-    <label htmlFor={name} className="form-label">
-      Pick time
-    </label>
-    <input
-      type="datetime-local"
-      className="form-control mb-3"
-      id={name}
-      name={name}
-      onChange={change}
-    ></input>
-  </div>
-  // <DatePicker
-  //     selected={state.values.datetime}
-  //     onChange={(date) => {
-  //         change({ target: { id: name, value: date } })
-  //     }}
-  //     showTimeSelect
-  //     dateFormat="Pp"
-  // />
+  <Form.Group className="mb-3" controlId={name}>
+  <Form.Label>Pick time</Form.Label>
+  <Form.Control 
+    type="datetime-local"
+    // value={state.values?.[name] || ''}
+    onChange={change}
+    required
+  />
+</Form.Group>
 );
 
-const SportDropdown = ({ name, text, change }) => (
-  <div>
-    <label htmlFor={name} className="form-label">
-      {text}
-    </label>
-    <Form.Select id={name} onChange={change}>
-      <option>Select the sport you want to play</option>
+const SportDropdown = ({ name, state, text, change }) => (
+  <Form.Group className="mb-3" controlId={name}>
+    <Form.Label>{text}</Form.Label>
+    <Form.Control as="select" required onChange={change} value={state.values?.[name] || ''}>
+      <option value="" disabled>Select the sport you want to play</option>
       <option value="Basketball">Basketball</option>
       <option value="Soccer">Soccer</option>
       <option value="Football">Football</option>
       <option value="Tennis">Tennis</option>
       <option value="Frisby">Frisby</option>
-    </Form.Select>
-  </div>
+    </Form.Control>
+  </Form.Group>
 );
 
 const EventForm = ({ isVisible, closeEventForm }) => {
   const [state, change] = useFormData({ datetime: new Date() });
   const dispatch = useDispatch();
   // const [isMapModalVisible, setIsMapModalVisible] = useState(false);
-  // const [location, setLocation] = useState("");
 
 
   const autocompleteInputRef = useRef(null);
@@ -139,7 +125,6 @@ const EventForm = ({ isVisible, closeEventForm }) => {
 
 
   const handlePlaceSelected = (place, autocomplete) => {
-    // console.log('Selected place:', place);
     // Update location and latLng with change event
     const location = place.formatted_address;
     const latLng = {
@@ -147,7 +132,6 @@ const EventForm = ({ isVisible, closeEventForm }) => {
       lng: place.geometry.location.lng(),
     };
     change({ location, latLng });
-    // window.google.maps.event.clearInstanceListeners(autocomplete);
   };
 
   // const openMapModal = () => {
@@ -159,27 +143,22 @@ const EventForm = ({ isVisible, closeEventForm }) => {
 
   const addEvent = (event) => {
     console.log(event);
-    // dispatch(createEvent(event));
+    dispatch(createEvent(event));
   };
 
-  const InputLocation = ({ name, text, state, change }) => (
-    <div className="mb-3">
-      <label htmlFor={name} className="form-label">
-        {text}
-      </label>
-      {/* <MapLocation
-      onPlaceSelected={handlePlaceSelected}
-      change={setLocation}
-      /> */}
-      {/* <input
-      className="form-control"
-      id={name}
-      name={name}
-      defaultValue={state.values?.[name]}
-      onChange={change}
-    /> */}
-    </div>
-  );
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    if (form.checkValidity() === false) {
+      event.stopPropagation();
+    } else {
+      addEvent({
+        ...state.values,
+        datetime: state.values.datetime.toString(),
+      });
+      closeEventForm();
+    }
+  };
 
   return (
     <Modal
@@ -193,68 +172,62 @@ const EventForm = ({ isVisible, closeEventForm }) => {
           <h4>Create Event</h4>
         </Modal.Title>
       </Modal.Header>
+      <Form onSubmit={handleSubmit} >
       <Modal.Body>
+        
         <div className="container pt-3">
-          <form>
+          
             <InputField
               name="title"
               text="Title"
               state={state}
               change={change}
+              type="text"
             />
             <InputField
               name="description"
               text="Description"
               state={state}
               change={change}
+              type="text"
             />
-            <div className="mb-3">
-              <label htmlFor="location" className="form-label">
-                Location
-              </label>
-              <input
+            <Form.Group className="mb-3" controlId="location">
+              <Form.Label>Location</Form.Label>
+              <Form.Control 
                 ref={autocompleteInputRef}
-                className="form-control"
-                id="location"
-                name="location"
-                // onChange={change}
+                type="text"
+                required
+                minLength="5"
               />
-            </div>
+            </Form.Group>
             <InputDatetimeField
               name="datetime"
-              text="Datetime"
               state={state}
               change={change}
             />
             <InputField
-              name="cap"
+              name="capacity"
               text="Capacity"
               state={state}
               change={change}
+              type="number"
             />
             <SportDropdown
-              name="Topic"
+              name="topic"
               text="Topic"
               state={state}
               change={change}
             />
-          </form>
+          
         </div>
       </Modal.Body>
       <Modal.Footer>
         <Button onClick={closeEventForm}>Close</Button>
-        <Button
-          onClick={() => {
-            addEvent({
-              ...state.values,
-              datetime: state.values.datetime.toString(),
-            });
-            closeEventForm();
-          }}
-        >
+        <Button type="submit">
           Submit
         </Button>
       </Modal.Footer>
+      </Form>
     </Modal>
   );
 };

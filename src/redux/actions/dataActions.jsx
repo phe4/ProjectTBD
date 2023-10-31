@@ -3,35 +3,7 @@ import { db } from "../../utilities/firebase";
 import { ref, update, get, set, query, orderByChild, limitToFirst, remove, startAt, endAt, equalTo } from "firebase/database";
 import { v4 as uuidv4 } from 'uuid';
 import Fuse from "fuse.js";
-
-const validateEvent = (event) => {
-  const errors = {};
-  if (!event.title || event.title === '') {
-    errors.title = 'Title is required';
-  }
-  if (!event.description || event.description === '') {
-    errors.description = 'Description is required';
-  }
-  if (!event.topic || event.topic === '') {
-    errors.topic = 'Topic is required';
-  }
-  if (!event.time || event.time === '') {
-    errors.time = 'Time is required';
-  }
-  if (!event.location || event.location === '') {
-    errors.location = 'Location is required';
-  }
-  if (!event.capacity || event.capacity === '') {
-    errors.capacity = 'Capacity is required';
-  }
-  if (!event.latitude || event.latitude === '') {
-    errors.latitude = 'Latitude is required';
-  }
-  if (!event.longitude || event.longitude === '') {
-    errors.longitude = 'Longitude is required';
-  }
-  return errors;
-};
+import { validateEvent } from "../../utilities/validation";
 
 export const fetchEvents = createAsyncThunk(
   'data/fetchEvents',
@@ -124,11 +96,13 @@ export const createEvent = createAsyncThunk(
   'data/createEvent',
   async (event, thunkAPI) => {
     const errors = validateEvent(event);
-    if (Object.keys(errors).length > 0) {
+    console.log(errors);
+    if (errors !== null && Object.keys(errors).length > 0) {
       return thunkAPI.rejectWithValue(errors);
     }
     const eventId = uuidv4();
     const eventRef = ref(db, `events/${eventId}`);
+    console.log(eventRef);
     await set(eventRef, event);
     return event;
   }
