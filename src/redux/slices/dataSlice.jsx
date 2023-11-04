@@ -18,7 +18,7 @@ const dataSlice = createSlice({
       })
       .addCase(fetchEvents.fulfilled, (state, action) => {
         state.status = 'idle';
-        state.events = state.events.concat(action.payload);
+        state.events = action.payload;
       })
       .addCase(fetchEvents.rejected, (state, action) => {
         state.status = 'idle';

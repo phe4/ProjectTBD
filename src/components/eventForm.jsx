@@ -1,9 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Modal, Button } from "react-bootstrap";
-import { useDispatch } from "react-redux";
+import { Modal, Button, Row, Col} from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
 import { createEvent } from "../redux/actions/dataActions";
-import { validateEvent } from "../utilities/validation";
-import { Form, InputGroup } from "react-bootstrap";
+import { Form } from "react-bootstrap";
 
 export const useFormData = (values = {}) => {
   const [state, setState] = useState(() => ({ values }));
@@ -39,7 +38,7 @@ export const useFormData = (values = {}) => {
 };
 
 const InputField = ({ name, text, state, change, type }) => (
-  <Form.Group className="mb-3" controlId={name}>
+  <Form.Group as={Col} className="mb-3" controlId={name}>
     <Form.Label>{text}</Form.Label>
     <Form.Control 
       type={type}
@@ -78,9 +77,22 @@ const SportDropdown = ({ name, state, text, change }) => (
   </Form.Group>
 );
 
+const UserLevelDropdown = ({ name, state, text, change }) => (
+  <Form.Group as={Col} className="mb-3" controlId={name}>
+    <Form.Label>{text}</Form.Label>
+    <Form.Control as="select" required onChange={change} value={state.values?.[name] || ''}>
+      <option value="" disabled>student level</option>
+      <option value="1">Beginner</option>
+      <option value="2">Intermediate</option>
+      <option value="3">Advanced</option>
+    </Form.Control>
+  </Form.Group>
+);
+
 const EventForm = ({ isVisible, closeEventForm }) => {
   const [state, change] = useFormData({ datetime: new Date() });
   const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.user);
   // const [isMapModalVisible, setIsMapModalVisible] = useState(false);
 
 
@@ -152,10 +164,17 @@ const EventForm = ({ isVisible, closeEventForm }) => {
     if (form.checkValidity() === false) {
       event.stopPropagation();
     } else {
-      addEvent({
-        ...state.values,
-        datetime: state.values.datetime.toString(),
-      });
+      if ( user !== null) {
+        addEvent({
+          ...state.values,
+          datetime: state.values.datetime.toString(),
+          attendees: [],
+          host: user.id,
+        });
+      } else {
+        // TODO: show error message
+        alert("You need to login to create an event");
+      }
       closeEventForm();
     }
   };
@@ -184,13 +203,18 @@ const EventForm = ({ isVisible, closeEventForm }) => {
               change={change}
               type="text"
             />
-            <InputField
-              name="description"
-              text="Description"
-              state={state}
-              change={change}
-              type="text"
-            />
+            <Form.Group className="mb-3" controlId="description">
+              <Form.Label>Description</Form.Label>
+              <Form.Control
+                as="textarea"
+                rows={2}
+                value={state.values?.description || ''}
+                onChange={change}
+                minLength="10"
+                maxLength="400"
+                required
+              />
+            </Form.Group>
             <Form.Group className="mb-3" controlId="location">
               <Form.Label>Location</Form.Label>
               <Form.Control 
@@ -205,13 +229,30 @@ const EventForm = ({ isVisible, closeEventForm }) => {
               state={state}
               change={change}
             />
-            <InputField
-              name="capacity"
-              text="Capacity"
-              state={state}
-              change={change}
-              type="number"
-            />
+            <Row className="mb-3">
+              <InputField
+                name="capacity"
+                text="Capacity"
+                state={state}
+                change={change}
+                type="number"
+              />
+              
+              <UserLevelDropdown
+                name="userLevel"
+                text="User level"
+                state={state}
+                change={change}
+              />
+
+              <Form.Group as={Col} className="mb-3 " controlId="vip">
+                <Form.Label>VIP</Form.Label>
+                <Form.Check 
+                  type="switch"
+                  onChange={change}
+                />
+              </Form.Group>
+            </Row>
             <SportDropdown
               name="topic"
               text="Topic"
